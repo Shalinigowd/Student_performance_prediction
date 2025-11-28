@@ -1,0 +1,12 @@
+flask
+xgboost
+scikit-learn
+pandas
+numpy
+joblib
+fpdf
+flask-wtf
+python-dotenv
+flask-cors
+requests
+beautifulsoup4

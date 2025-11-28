@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Student Performance Predictor</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <script src="/static/js/main.js" defer></script>
+</head>
+<body>
+  <header class="hero">
+    <h1>SmartStudy — Student Performance Predictor</h1>
+    <p class="quote">"Small daily improvements lead to stunning results."</p>
+  </header>
+
+  <main class="container">
+    <!-- IQ Section -->
+    <div class="card">
+      <h2>1 — IQ Test</h2>
+      <p>Use the IQ test (simulated below). When it finishes, enter IQ score.</p>
+
+      <a href="https://iqtest-free.org/" target="_blank" rel="noopener noreferrer">
+        Take IQ Test
+      </a>
+
+      <label>IQ Test Marks</label>
+      <input type="number" name="iq" id="iqField" min="40" max="160" value="100">
+    </div>
+
+    <!-- Prediction Form -->
+    <form id="predictForm" class="card">
+      <h2>2 — Student Performance Prediction</h2>
+
+      <div class="grid">
+        <div class="field"><label>Kannada</label><input type="number" name="kan" value="60" min="0" max="100" required></div>
+        <div class="field"><label>English</label><input type="number" name="english" value="60" min="0" max="100" required></div>
+        <div class="field"><label>Maths</label><input type="number" name="maths" value="60" min="0" max="100" required></div>
+        <div class="field"><label>Chemistry</label><input type="number" name="chem" value="60" min="0" max="100" required></div>
+        <div class="field"><label>Biology / CS</label><input type="number" name="bio_or_cs" value="60" min="0" max="100" required></div>
+        <div class="field"><label>Physics</label><input type="number" name="physics" value="60" min="0" max="100" required></div>
+
+        <div class="field"><label>Study hours/day</label><input type="number" name="study_hours" value="12" min="0" max="80" required></div>
+
+        <div class="field"><label>Extra Activity?</label>
+          <select name="extra_activity">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Time on extra activity (hrs/week)</label>
+          <input type="number" name="time_extra" value="4" min="0" max="40">
+        </div>
+
+        <div class="field"><label>Accademic realated activity?</label>
+          <select name="attended_contest">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+
+        <div class="field"><label>Number of extra courses</label>
+          <input type="number" name="courses" value="0" min="0" max="10">
+        </div>
+
+        <div class="field"><label>Attendance %</label>
+          <input type="number" name="attendance" value="85" min="0" max="100" required>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary">Predict</button>
+      </div>
+    </form>
+
+    <!-- Result Card -->
+    <div id="resultCard" class="card" style="display:none;">
+      <h2>Prediction Result</h2>
+      <p id="predictionText"></p>
+
+      <h3>Suggestions</h3>
+      <ul id="suggestionsList"></ul>
+
+      <h3>Generated Timetable</h3>
+      <table id="ttTable" class="timetable">
+        <thead>
+          <tr><th>Day</th><th>Subject</th><th>Hours</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="actions">
+        <!-- Removed Download PDF button -->
+        <button id="resetBtn" class="btn">Reset</button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>Made with ❤️ — Uses XGBoost + Flask</p>
+  </footer>
+</body>
+</html>

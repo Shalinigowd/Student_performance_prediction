@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card result">
+  <h2>Prediction Result</h2>
+
+  <p>
+    <strong>Prediction:</strong>
+    {{ result.prediction }}
+    &middot;
+    <strong>Confidence:</strong>
+    {{ result.confidence }}
+    {% if result.capability_score is defined %}
+      &middot;
+      <strong>Capability:</strong> {{ (result.capability_score * 100) | round(1) }}%
+    {% elif result.probability_estimate is defined %}
+      &middot;
+      <strong>Estimate:</strong> {{ (result.probability_estimate * 100) | round(1) }}%
+    {% endif %}
+  </p>
+
+  <h3>Personalized Suggestions</h3>
+  <ul>
+    {% if result.suggestions %}
+      {% for s in result.suggestions %}
+        <li>{{ s }}</li>
+      {% endfor %}
+    {% else %}
+      <li>No suggestions available.</li>
+    {% endif %}
+  </ul>
+
+  <h3>Generated Weekly Timetable</h3>
+  <table class="timetable" aria-label="Weekly study timetable">
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Slot 1</th>
+        <th>Slot 2</th>
+        <th>Slot 3</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if result.timetable %}
+        {% for row in result.timetable %}
+          <tr>
+            <td>{{ row.day }}</td>
+            <td>{{ row.slot1 }}</td>
+            <td>{{ row.slot2 }}</td>
+            <td>{{ row.slot3 }}</td>
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="4" class="muted">No timetable generated.</td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+
+  <div class="actions" style="margin-top:1rem;">
+    <a href="/" class="btn">Back</a>
+  </div>
+</section>
+{% endblock %}
