@@ -1,0 +1,21 @@
+:root{
+  --bg:#f9fbff;
+  --card:#ffffff;
+  --accent:#6c5ce7;
+  --muted:#6b7280;
+}
+*{box-sizing:border-box;font-family:Inter,Roboto,Arial;}
+body{background:linear-gradient(180deg,#f0f7ff,#fff);margin:0;color:#222;}
+header.hero{padding:26px;text-align:center;background:linear-gradient(90deg,var(--accent),#00a3ff);color:#fff;border-bottom:6px solid rgba(0,0,0,0.04)}
+header.hero h1{margin:0;font-size:26px}
+header.hero .quote{opacity:0.95;margin-top:6px;font-style:italic}
+.container{max-width:1100px;margin:20px auto;padding:10px}
+.card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 25px rgba(30,30,80,0.06);margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.field label{display:block;margin-bottom:6px;font-weight:600;color:var(--muted)}
+.field input, .field select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef}
+.actions{margin-top:14px}
+.btn{display:inline-block;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;text-decoration:none;background:#eee;color:#222}
+.btn.primary{background:var(--accent);color:#fff;box-shadow:0 8px 20px rgba(108,92,231,0.15)}
+.timetable{width:100%;border-collapse:collapse}
+.timetable th, .timetable td{padding:8px;border-bottom:1px solid #f0f0f0}

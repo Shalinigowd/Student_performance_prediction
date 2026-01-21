@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>IQ Import Failed</h2>
+  <p>We couldn't fetch the IQ score using the provided token: <strong>{{ token }}</strong></p>
+  <p>Please try again or paste the IQ score manually into the prediction form.</p>
+  <a href="/" class="btn">Back to Home</a>
+</div>
+{% endblock %}

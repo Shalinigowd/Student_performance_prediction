@@ -1,0 +1,17 @@
+Best params: {'learning_rate': 0.1, 'max_depth': 3, 'n_estimators': 200, 'subsample': 0.8}
+Test accuracy: 0.9600
+
+Confusion matrix:
+[[195   5]
+ [ 11 189]]
+
+Classification report:
+              precision    recall  f1-score   support
+
+        Fail       0.95      0.97      0.96       200
+        Pass       0.97      0.94      0.96       200
+
+    accuracy                           0.96       400
+   macro avg       0.96      0.96      0.96       400
+weighted avg       0.96      0.96      0.96       400
+

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Student Performance Predictor</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <script src="/static/js/main.js" defer></script>
+</head>
+
+<body>
+  <header class="hero">
+    <h1>SmartStudy — Student Performance Predictor</h1>
+    <p class="quote">"Small daily improvements lead to stunning results."</p>
+  </header>
+
+  <main class="container">
+    {% if error %}
+      <div class="alert alert-error" role="alert" style="margin-bottom:1rem; padding:0.75rem; border-radius:6px; background:#ffe6e6; color:#800;">{{ error }}</div>
+    {% endif %}
+    <form id="predictForm" enctype="multipart/form-data" method="POST" action="/predict_form">
+      <!-- IQ Section -->
+      <div class="card">
+        <h2>1 — IQ Test</h2>
+        <p>Use the IQ test (simulated below). When it finishes, enter IQ score.</p>
+
+        <a href="https://iqtest-free.org/" target="_blank" rel="noopener noreferrer">
+          Take IQ Test
+        </a>
+
+          <div class="field" style="margin-top: 1rem;">
+          <label>IQ Test Marks</label>
+          <input type="number" name="iq" id="iqField" min="0" max="100" required aria-required="true">
+        </div>
+
+        <div class="field" style="margin-top: 1rem;">
+          <label>Upload IQ Certificate</label>
+          <input type="file" name="iq_certificate" id="iqCertInput" accept=".pdf,.jpg,.jpeg,.png" required aria-required="true">
+          <div id="certPreview" style="margin-top: 10px; display: none;">
+            <img id="certImage" src="" alt="Certificate Preview"
+              style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd; display: none;">
+            <p id="certName" style="font-size: 0.9em; color: #666; margin-top: 5px;"></p>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        document.getElementById('iqCertInput').addEventListener('change', function (event) {
+          const file = event.target.files[0];
+          const previewDiv = document.getElementById('certPreview');
+          const img = document.getElementById('certImage');
+          const name = document.getElementById('certName');
+
+          if (file) {
+            previewDiv.style.display = 'block';
+            name.textContent = 'Selected: ' + file.name;
+
+            if (file.type.startsWith('image/')) {
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                img.src = e.target.result;
+                img.style.display = 'block';
+              }
+              reader.readAsDataURL(file);
+            } else {
+              img.style.display = 'none';
+              name.textContent += ' (Preview not available for this file type)';
+            }
+          } else {
+            previewDiv.style.display = 'none';
+          }
+        });
+      </script>
+
+      <!-- Prediction Form -->
+      <div class="card">
+        <h2>2 — Student Performance Prediction</h2>
+
+        <div class="grid">
+            <div class="field"><label>Kannada</label><input type="number" name="kan" min="0" max="100"
+              required></div>
+            <div class="field"><label>English</label><input type="number" name="english" min="0" max="100"
+              required></div>
+            <div class="field"><label>Maths</label><input type="number" name="maths" min="0" max="100"
+              required></div>
+            <div class="field"><label>Chemistry</label><input type="number" name="chem" min="0" max="100"
+              required></div>
+            <div class="field"><label>Biology / CS</label><input type="number" name="bio_or_cs" min="0"
+              max="100" required></div>
+            <div class="field"><label>Physics</label><input type="number" name="physics" min="0" max="100"
+              required></div>
+
+          <div class="field"><label>Study hours/day</label><input type="number" name="study_hours" min="0" max="24" step="0.5" required></div>
+
+          <div class="field"><label>Academic related Activity/course?</label>
+            <select name="extra_activity" id="extraActivitySelect">
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+
+          <div class="field" id="timeExtraField" style="display:none;">
+            <label>Time spent on activity (hrs/week)</label>
+            <input type="number" name="time_extra" min="0" max="40">
+          </div>
+
+          <div class="field"><label>Extra activity?</label>
+            <select name="attended_contest">
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+
+
+
+          <div class="field"><label>Attendance %</label>
+            <input type="number" name="attendance" min="0" max="100" required>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn primary">Predict</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Result Card -->
+    <div id="resultCard" class="card" style="display:none;">
+      <h2>Prediction Result</h2>
+      <p id="predictionText"></p>
+
+      <h3>Suggestions</h3>
+      <ul id="suggestionsList"></ul>
+
+      <h3>Generated Timetable</h3>
+      <table id="ttTable" class="timetable">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Subject</th>
+            <th>Hours</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="actions">
+        <!-- Removed Download PDF button -->
+        <button id="resetBtn" class="btn">Reset</button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>Made with ❤️ — Uses XGBoost + Flask</p>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const extraSelect = document.getElementById('extraActivitySelect');
+      const timeField = document.getElementById('timeExtraField');
+
+      function toggleTimeField() {
+        if (extraSelect.value === 'yes') {
+          timeField.style.display = 'block';
+        } else {
+          timeField.style.display = 'none';
+        }
+      }
+
+      if (extraSelect && timeField) {
+        extraSelect.addEventListener('change', toggleTimeField);
+        // Initial check
+        toggleTimeField();
+      }
+    });
+  </script>
+</body>
+
+</html>
